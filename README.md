@@ -1,41 +1,59 @@
 # Card payment processing with Checkout API
 
-## Using a NodeJS server with Express
+[Português](README.pt.md) / [Español](README.es.md)
 
-### Requirements
+## :computer: Technologies
 
-- Node v10 or higher;
-- Read our [testing instructions](https://www.mercadopago.com/developers/en/guides/payments/api/testing);
+- Node.js
+- [NPM](https://www.npmjs.com) (dependency manager)
+- Express
 
-### How to run it
+## 💡 Requirements
 
-#### Using NPM start
+- Node.js 10 or higher (you can download it [here](https://nodejs.org/)).
+- [Read our instructions](https://www.mercadopago.com/developers/en/guides/overview#bookmark_el_desarrollo_con_c%C3%B3digo) on how to create an application at the Mercado Pago Developer Panel in order to acquire your public key and access token. They will grant you access to Mercado Pago's public APIs.
 
-In order to execute this sample you need to define the environment variables
-`PUBLIC_ACCESS_TOKEN` and `ACCESS_TOKEN`, their values must be the public and
-private [keys](https://www.mercadopago.com.br/developers/pt/guides/resources/credentials) of your application, respectively,
-then run `npm start`. For instance:
+## :gear: Installation
 
-```sh
-$ npm install
-$ export PUBLIC_ACCESS_TOKEN=<public-key>
-$ export ACCESS_TOKEN=<private-key>
-$ npm start
+1. Clone the project.
+
+```bash
+git clone https://github.com/mercadopago/card-payment-sample-node.git
 ```
 
-You execute with the following single line command:
+2. Go to the project's folder.
 
+```bash
+cd card-payment-sample-node
 ```
-$ PUBLIC_ACCESS_TOKEN=<public-key> ACCESS_TOKEN=<private-key> npm start
+
+3. Then install the dependencies.
+
+```bash
+npm install
 ```
 
-#### Using the script
+## 🌟 How to run it
 
-Alongside this sample's source code, we provide the script `run.sh` which
-will request the above mentioned keys and run `npm start` for you:
+1. Run the following command to start the application:
 
-```sh
-$ npm install
-$ chmod +x run.sh
-$ ./run.sh
-```
+```bash
+MERCADO_PAGO_SAMPLE_PUBLIC_KEY=YOUR_PUBLIC_KEY MERCADO_PAGO_SAMPLE_ACCESS_TOKEN=YOUR_ACCESS_TOKEN npm start
+``` 
+
+2. Remember to replace the values of `YOUR_PUBLIC_KEY` and `YOUR_ACCESS_TOKEN` with the corresponding [credentials](https://www.mercadopago.com/developers/panel) from your account.
+
+3. Navigate to [http://localhost:8080](http://localhost:8080) in your browser.
+
+### :test_tube: Testing
+
+On our [testing instructions](https://www.mercadopago.com/developers/en/guides/online-payments/checkout-api/testing) you'll find **[credit cards](https://www.mercadopago.com/developers/en/guides/online-payments/checkout-api/testing#bookmark_test_cards)** that can be used along with this sample and a guide on how to create **[test users](https://www.mercadopago.com/developers/en/guides/online-payments/checkout-api/testing#bookmark_how_to_create_users)**.
+
+## :handshake: Contributing
+
+You can contribute to this project by reporting problems and bugs. Before opening an issue, make sure to read our [code of conduct](CODE_OF_CONDUCT.md).
+
+## :bookmark: License
+
+MIT License. Copyright (c) 2021 - Mercado Pago <br/>
+For more information, see the [LICENSE](LICENSE) file.

@@ -1,11 +1,11 @@
-const publicAccessToken = document.getElementById("public-access-token").value;
-const mp = new MercadoPago(publicAccessToken);
+const mercadoPagoPublicKey = document.getElementById("mercado-pago-public-key").value;
+const mercadopago = new MercadoPago(mercadoPagoPublicKey);
 
 function loadCardForm() {
     const productCost = document.getElementById('amount').value;
     const productDescription = document.getElementById('product-description').innerText;
 
-    const cardForm = mp.cardForm({
+    const cardForm = mercadopago.cardForm({
         amount: productCost,
         autoMount: true,
         form: {
@@ -58,6 +58,7 @@ function loadCardForm() {
             },
             onSubmit: event => {
                 event.preventDefault();
+                document.getElementById("loading-message").style.display = "block";
 
                 const {
                     paymentMethodId,

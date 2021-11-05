@@ -3,19 +3,19 @@ const path = require("path");
 const express = require("express");
 const mercadopago = require("mercadopago");
 
-const publicAccessToken = process.env.PUBLIC_ACCESS_TOKEN;
-if (!publicAccessToken) {
-  console.log("Error: public access token not defined");
+const mercadoPagoPublicKey = process.env.MERCADO_PAGO_SAMPLE_PUBLIC_KEY;
+if (!mercadoPagoPublicKey) {
+  console.log("Error: public key not defined");
   process.exit(1);
 }
 
-const accessToken = process.env.ACCESS_TOKEN;
-if (!accessToken) {
+const mercadoPagoAccessToken = process.env.MERCADO_PAGO_SAMPLE_ACCESS_TOKEN;
+if (!mercadoPagoAccessToken) {
   console.log("Error: access token not defined");
   process.exit(1);
 }
 
-mercadopago.configurations.setAccessToken(accessToken);
+mercadopago.configurations.setAccessToken(mercadoPagoAccessToken);
 
 const app = express();
 
@@ -28,7 +28,7 @@ app.use(express.static("./static"));
 app.use(express.json());
 
 app.get("/", function (req, res) {
-  res.status(200).render("index", { publicAccessToken });
+  res.status(200).render("index", { mercadoPagoPublicKey });
 }); 
 
 app.post("/process_payment", (req, res) => {

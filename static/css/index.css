@@ -295,6 +295,12 @@ main {
     cursor:pointer;
 }
 
+#loading-message {
+    display: none;
+    text-align: center;
+    font-weight: 700;
+}
+
 footer {
     padding: 2% 10% 6% 10%;
     margin: 0 auto;
