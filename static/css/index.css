@@ -398,3 +398,7 @@ footer p a:hover {
 .container__result {
     display: none;
 }
+
+#fail-response, #success-response {
+    display: none;
+} 

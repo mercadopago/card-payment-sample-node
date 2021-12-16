@@ -96,9 +96,16 @@ function loadCardForm() {
                         return response.json();
                     })
                     .then(result => {
-                        document.getElementById("payment-id").innerText = result.id;
-                        document.getElementById("payment-status").innerText = result.status;
-                        document.getElementById("payment-detail").innerText = result.status_detail;
+                        if(!result.hasOwnProperty("error_message")) {
+                            document.getElementById("success-response").style.display = "block";
+                            document.getElementById("payment-id").innerText = result.id;
+                            document.getElementById("payment-status").innerText = result.status;
+                            document.getElementById("payment-detail").innerText = result.detail;
+                        } else {
+                            document.getElementById("error-message").textContent = result.error_message;
+                            document.getElementById("fail-response").style.display = "block";
+                        }
+                        
                         $('.container__payment').fadeOut(500);
                         setTimeout(() => { $('.container__result').show(500).fadeIn(); }, 500);
                     })
