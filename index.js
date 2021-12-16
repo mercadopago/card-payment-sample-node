@@ -53,16 +53,34 @@ app.post("/process_payment", (req, res) => {
   mercadopago.payment.save(paymentData)
     .then(function(response) {
       const { response: data } = response;
-      res.status(response.status).json({
-        status_detail: data.status_detail,
+
+      res.status(201).json({
+        detail: data.status_detail,
         status: data.status,
         id: data.id
       });
     })
     .catch(function(error) {
-      res.status(error.status).send(error);
+      console.log(error);
+      const { errorMessage, errorStatus }  = validateError(error);
+      res.status(errorStatus).json({ error_message: errorMessage });
     });
 });
+
+function validateError(error) {
+  let errorMessage = 'Unknown error cause';
+  let errorStatus = 400;
+
+  if(error.cause) {
+    const sdkErrorMessage = error.cause[0].description;
+    errorMessage = sdkErrorMessage || errorMessage;
+
+    const sdkErrorStatus = error.status;
+    errorStatus = sdkErrorStatus || errorStatus;
+  }
+
+  return { errorMessage, errorStatus };
+}
 
 app.listen(8080, () => {
   console.log("The server is now running on port 8080");
