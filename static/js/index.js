@@ -7,7 +7,7 @@ function loadCardForm() {
 
     const cardForm = mercadopago.cardForm({
         amount: productCost,
-        autoMount: true,
+        iframe: true,
         form: {
             id: "form-checkout",
             cardholderName: {
@@ -21,18 +21,23 @@ function loadCardForm() {
             cardNumber: {
                 id: "form-checkout__cardNumber",
                 placeholder: "Card number",
+                style: {
+                    fontSize: "1rem"
+                },
             },
-            cardExpirationMonth: {
-                id: "form-checkout__cardExpirationMonth",
-                placeholder: "MM",
-            },
-            cardExpirationYear: {
-                id: "form-checkout__cardExpirationYear",
-                placeholder: "YY",
+            cardExpirationDate: {
+                id: "form-checkout__cardExpirationDate",
+                placeholder: "MM/YYYY",
+                style: {
+                    fontSize: "1rem"
+                },
             },
             securityCode: {
                 id: "form-checkout__securityCode",
                 placeholder: "Security code",
+                style: {
+                    fontSize: "1rem"
+                },
             },
             installments: {
                 id: "form-checkout__installments",
@@ -121,6 +126,15 @@ function loadCardForm() {
                     payButton.removeAttribute("disabled");
                 };
             },
+            onCardTokenReceived: (errorData, token) => {
+                if (errorData && errorData.error.fieldErrors.length !== 0) {
+                    errorData.error.fieldErrors.forEach(errorMessage => {
+                        alert(errorMessage);
+                    });
+                }
+
+                return token;
+            }
         },
     });
 };
