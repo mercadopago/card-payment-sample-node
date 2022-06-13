@@ -6,6 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="css/index.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://sdk.mercadopago.com/js/v2"></script>
+        <script type="text/javascript" src="js/index.js" defer></script>
     </head>
     <body>
         <input id="mercado-pago-public-key" value="{{mercadoPagoPublicKey}}" type="hidden" />
@@ -94,20 +97,18 @@
                                 <h3 class="title">Card Details</h3>
                                 <div class="row">
                                     <div class="form-group col-sm-8">
-                                        <input id="form-checkout__cardholderName" name="cardholderName" type="text" class="form-control"/>
+                                        <input id="form-checkout__cardholderName" name="cardholderName" type="text" class="form-control" />
                                     </div>
                                     <div class="form-group col-sm-4">
-                                        <div class="input-group expiration-date">
-                                            <input id="form-checkout__cardExpirationMonth" name="cardExpirationMonth" type="text" class="form-control"/>
-                                            <span class="date-separator">/</span>
-                                            <input id="form-checkout__cardExpirationYear" name="cardExpirationYear" type="text" class="form-control"/>
+                                        <div class="input-group expiration-date">                                            
+                                            <div id="form-checkout__expirationDate" class="form-control h-40"></div>
                                         </div>
                                     </div>
                                     <div class="form-group col-sm-8">
-                                        <input id="form-checkout__cardNumber" name="cardNumber" type="text" class="form-control"/>
+                                        <div id="form-checkout__cardNumber" class="form-control h-40"></div>
                                     </div>
                                     <div class="form-group col-sm-4">
-                                        <input id="form-checkout__securityCode" name="securityCode" type="text" class="form-control"/>
+                                        <div id="form-checkout__securityCode" class="form-control h-40"></div>
                                     </div>
                                     <div id="issuerInput" class="form-group col-sm-12 hidden">
                                         <select id="form-checkout__issuer" name="issuer" class="form-control"></select>
@@ -118,6 +119,8 @@
                                     <div class="form-group col-sm-12">
                                         <input type="hidden" id="amount" />
                                         <input type="hidden" id="description" />
+                                        <div id="validation-error-messages">
+                                        </div>
                                         <br>
                                         <button id="form-checkout__submit" type="submit" class="btn btn-primary btn-block">Pay</button>
                                         <br>
@@ -183,7 +186,4 @@
             </div>
         </footer>
     </body>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
-    <script type="text/javascript" src="js/index.js" defer></script>
 </html>

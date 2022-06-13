@@ -18,6 +18,10 @@ main {
     display: none
 }
 
+.h-40 {
+    height: 40px;
+}
+
 /* Shopping Cart Section - Start */
 .shopping-cart {
     padding-bottom: 10px;
@@ -401,4 +405,12 @@ footer p a:hover {
 
 #fail-response, #success-response {
     display: none;
-} 
+}
+
+.validation-error {
+    border-color: red;
+}
+
+#validation-error-messages p {
+    color: red;
+}
