@@ -1,6 +1,6 @@
 {
   "name": "card-payment-node-sample",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "An example of integration with the MercadoPago checkout API for card payments",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "hbs": "^4.1.2",
-    "mercadopago": "^1.5.9",
+    "mercadopago": "^2.0.1",
     "open": "^8.4.0"
   }
 }
