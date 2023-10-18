@@ -15,13 +15,15 @@ if (!mercadoPagoAccessToken) {
   process.exit(1);
 }
 
-mercadopago.configurations.setAccessToken(mercadoPagoAccessToken);
+const client = new mercadopago.MercadoPagoConfig({
+  accessToken: mercadoPagoAccessToken,
+});
 
 const app = express();
 
 app.set("view engine", "html");
 app.engine("html", require("hbs").__express);
-app.set("views", path.join(__dirname, "views"))
+app.set("views", path.join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("./static"));
@@ -29,11 +31,14 @@ app.use(express.json());
 
 app.get("/", function (req, res) {
   res.status(200).render("index", { mercadoPagoPublicKey });
-}); 
+});
 
 app.post("/process_payment", (req, res) => {
   const { body } = req;
   const { payer } = body;
+
+  const payment = new mercadopago.Payment(client);
+
   const paymentData = {
     transaction_amount: Number(body.transactionAmount),
     token: body.token,
@@ -45,33 +50,32 @@ app.post("/process_payment", (req, res) => {
       email: payer.email,
       identification: {
         type: payer.identification.docType,
-        number: payer.identification.docNumber
-      }
-    }
+        number: payer.identification.docNumber,
+      },
+    },
   };
 
-  mercadopago.payment.save(paymentData)
-    .then(function(response) {
-      const { response: data } = response;
-
+  payment
+    .create({ body: paymentData })
+    .then(function (data) {
       res.status(201).json({
         detail: data.status_detail,
         status: data.status,
-        id: data.id
+        id: data.id,
       });
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
-      const { errorMessage, errorStatus }  = validateError(error);
+      const { errorMessage, errorStatus } = validateError(error);
       res.status(errorStatus).json({ error_message: errorMessage });
     });
 });
 
 function validateError(error) {
-  let errorMessage = 'Unknown error cause';
+  let errorMessage = "Unknown error cause";
   let errorStatus = 400;
 
-  if(error.cause) {
+  if (error.cause) {
     const sdkErrorMessage = error.cause[0].description;
     errorMessage = sdkErrorMessage || errorMessage;
 

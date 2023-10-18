@@ -10,7 +10,7 @@
 
 ## 💡 Requirements
 
-- Node.js 10 or higher (you can download it [here](https://nodejs.org/)).
+- Node.js 12 or higher (you can download it [here](https://nodejs.org/)).
 - [Read our instructions](https://www.mercadopago.com/developers/en/guides/overview#bookmark_el_desarrollo_con_c%C3%B3digo) on how to create an application at the Mercado Pago Developer Panel in order to acquire your public key and access token. They will grant you access to Mercado Pago's public APIs.
 
 ## :gear: Installation
