@@ -2,6 +2,7 @@ const open = require("open");
 const path = require("path");
 const express = require("express");
 const mercadopago = require("mercadopago");
+const { buildPaymentData, mergePayer } = require("./payer");
 
 const mercadoPagoPublicKey = process.env.MERCADO_PAGO_SAMPLE_PUBLIC_KEY;
 if (!mercadoPagoPublicKey) {
@@ -33,43 +34,54 @@ app.get("/", function (req, res) {
   res.status(200).render("index", { mercadoPagoPublicKey });
 });
 
-app.post("/process_payment", (req, res) => {
-  const { body } = req;
-  const { payer } = body;
-
+app.post("/process_payment", async (req, res) => {
+  const { paymentData, customerId, customerBody, submittedPayer } = buildPaymentData(req.body);
   const payment = new mercadopago.Payment(client);
 
-  const paymentData = {
-    transaction_amount: Number(body.transactionAmount),
-    token: body.token,
-    description: body.description,
-    installments: Number(body.installments),
-    payment_method_id: body.paymentMethodId,
-    issuer_id: body.issuerId,
-    payer: {
-      email: payer.email,
-      identification: {
-        type: payer.identification.docType,
-        number: payer.identification.docNumber,
-      },
-    },
-  };
+  try {
+    if (customerId && Object.keys(customerBody).length) {
+      await saveCustomerPayer(customerId, customerBody);
+    }
 
-  payment
-    .create({ body: paymentData })
-    .then(function (data) {
-      res.status(201).json({
-        detail: data.status_detail,
-        status: data.status,
-        id: data.id,
-      });
-    })
-    .catch(function (error) {
-      console.log(error);
-      const { errorMessage, errorStatus } = validateError(error);
-      res.status(errorStatus).json({ error_message: errorMessage });
+    const data = await payment.create({ body: paymentData });
+    res.status(201).json({
+      detail: data.status_detail,
+      status: data.status,
+      id: data.id,
+      payer: mergePayer(submittedPayer, data),
     });
+  } catch (error) {
+    console.log(error);
+    const { errorMessage, errorStatus } = validateError(error);
+    res.status(errorStatus).json({ error_message: errorMessage });
+  }
 });
+
+async function saveCustomerPayer(customerId, customerBody) {
+  const customer = new mercadopago.Customer(client);
+
+  try {
+    await customer.update({ customerId, body: customerBody });
+  } catch (error) {
+    if (!customerBody.email) {
+      console.log(error);
+      return;
+    }
+
+    const withoutEmail = Object.assign({}, customerBody);
+    delete withoutEmail.email;
+    if (!Object.keys(withoutEmail).length) {
+      console.log(error);
+      return;
+    }
+
+    try {
+      await customer.update({ customerId, body: withoutEmail });
+    } catch (retryError) {
+      console.log(retryError);
+    }
+  }
+}
 
 function validateError(error) {
   let errorMessage = "Unknown error cause";

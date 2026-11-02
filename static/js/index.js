@@ -73,12 +73,18 @@ function loadCardForm() {
                     paymentMethodId,
                     issuerId,
                     cardholderEmail: email,
+                    cardholderName,
                     amount,
                     token,
                     installments,
                     identificationNumber,
                     identificationType,
                 } = cardForm.getCardFormData();
+
+                const holderName = (cardholderName || document.getElementById("form-checkout__cardholderName").value || "").trim();
+                const nameParts = holderName.split(/\s+/).filter(Boolean);
+                const firstName = nameParts.shift() || "";
+                const lastName = nameParts.join(" ");
 
                 fetch("/process_payment", {
                     method: "POST",
@@ -94,6 +100,8 @@ function loadCardForm() {
                         description: productDescription,
                         payer: {
                             email,
+                            first_name: firstName,
+                            last_name: lastName,
                             identification: {
                                 type: identificationType,
                                 number: identificationNumber,
@@ -110,6 +118,7 @@ function loadCardForm() {
                             document.getElementById("payment-id").innerText = result.id;
                             document.getElementById("payment-status").innerText = result.status;
                             document.getElementById("payment-detail").innerText = result.detail;
+                            document.getElementById("payment-payer").innerText = formatPayer(result.payer);
                         } else {
                             document.getElementById("error-message").textContent = result.error_message;
                             document.getElementById("fail-response").style.display = "block";
@@ -147,6 +156,15 @@ function loadCardForm() {
         },
     });
 };
+
+function formatPayer(payer) {
+    if (!payer) return "";
+
+    const name = [payer.first_name, payer.last_name].filter(Boolean).join(" ");
+    const identification = payer.identification || {};
+    const document = [identification.type, identification.number].filter(Boolean).join(" ");
+    return [name, payer.email, document].filter(Boolean).join(" · ");
+}
 
 function removeFieldErrorMessages(input, validationErrorMessages) {
     Array.from(validationErrorMessages.children).forEach(child => {
